@@ -1,0 +1,99 @@
+@model IEnumerable<GestorSolicitudesTIC.ViewModels.ReporteAnalistaViewModel>
+@{
+    ViewData["Title"] = "Reporte por Analista";
+}
+
+<div class="page-header">
+    <h1>Reporte por Analista</h1>
+</div>
+
+<!-- Filtro rango fechas -->
+<form method="get" asp-action="Reporte" class="filter-bar mb-4">
+    <div class="fg">
+        <label>Desde</label>
+        <input type="date" name="desde" value="@ViewBag.Desde" class="form-control form-control-sm" />
+    </div>
+    <div class="fg">
+        <label>Hasta</label>
+        <input type="date" name="hasta" value="@ViewBag.Hasta" class="form-control form-control-sm" />
+    </div>
+    <div>
+        <button type="submit" class="btn-somex" style="font-size:.82rem;padding:.42rem 1rem">Generar</button>
+    </div>
+</form>
+
+@if (Model.Any())
+{
+    <!-- KPI resumen -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4">
+            <div class="kpi-card">
+                <div class="kpi-icon" style="background:#DBEAFE">👥</div>
+                <div><div class="kpi-val" style="color:#1E40AF">@Model.Count()</div><div class="kpi-lbl">Analistas activos</div></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="kpi-card">
+                <div class="kpi-icon" style="background:#DCFCE7">📋</div>
+                <div><div class="kpi-val" style="color:#166534">@Model.Sum(m => m.TotalSolicitudes)</div><div class="kpi-lbl">Total solicitudes atendidas</div></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="kpi-card">
+                <div class="kpi-icon" style="background:#FEF9C3">⏱️</div>
+                <div>
+                    <div class="kpi-val" style="color:#854D0E">
+                        @(Model.Where(m => m.PromedioHorasAtencion.HasValue).Any()
+                            ? Model.Where(m => m.PromedioHorasAtencion.HasValue).Average(m => m.PromedioHorasAtencion!.Value).ToString("F1") + "h"
+                            : "—")
+                    </div>
+                    <div class="kpi-lbl">Promedio horas atención</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">📊 Detalle por analista — @ViewBag.Desde al @ViewBag.Hasta</div>
+        <div class="card-body p-0">
+            <table class="table table-somex table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Analista</th>
+                        <th>Especialidad</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">En curso</th>
+                        <th class="text-center">Resueltas</th>
+                        <th class="text-center">Cerradas</th>
+                        <th class="text-center">Prom. horas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.OrderByDescending(m => m.TotalSolicitudes))
+                    {
+                        <tr>
+                            <td class="fw-semibold">@r.Analista</td>
+                            <td class="text-muted">@r.Especialidad</td>
+                            <td class="text-center fw-bold">@r.TotalSolicitudes</td>
+                            <td class="text-center"><span class="badge rounded-pill badge-enproceso">@r.EnCurso</span></td>
+                            <td class="text-center"><span class="badge rounded-pill badge-resuelta">@r.Resueltas</span></td>
+                            <td class="text-center"><span class="badge rounded-pill badge-cerrada">@r.Cerradas</span></td>
+                            <td class="text-center">
+                                @(r.PromedioHorasAtencion.HasValue ? r.PromedioHorasAtencion.Value.ToString("F1") + " h" : "—")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body text-center text-muted py-5">
+            <div style="font-size:3rem">📊</div>
+            <p>No hay datos de analistas para el rango seleccionado.</p>
+        </div>
+    </div>
+}

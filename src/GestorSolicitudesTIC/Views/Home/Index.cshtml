@@ -1,8 +1,113 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@using GestorSolicitudesTIC.Models
+@{
+    ViewData["Title"] = "Dashboard";
+    var abiertas  = (int)(ViewBag.TotalAbiertas  ?? 0);
+    var enProceso = (int)(ViewBag.TotalEnProceso ?? 0);
+    var resueltas = (int)(ViewBag.TotalResueltas ?? 0);
+    var cerradas  = (int)(ViewBag.TotalCerradas  ?? 0);
+    var alta      = (int)(ViewBag.TotalAlta      ?? 0);
+    var ultimas   = (IEnumerable<Solicitud>)(ViewBag.UltimasAbiertas ?? new List<Solicitud>());
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-header">
+    <h1>Dashboard TIC</h1>
+    <span class="text-muted small">@DateTime.Now.ToString("dddd, dd MMMM yyyy", new System.Globalization.CultureInfo("es-CO"))</span>
+</div>
+
+<!-- KPIs -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background:#DBEAFE">📋</div>
+            <div>
+                <div class="kpi-val" style="color:#1E40AF">@abiertas</div>
+                <div class="kpi-lbl">Abiertas</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background:#FEF9C3">⚙️</div>
+            <div>
+                <div class="kpi-val" style="color:#854D0E">@enProceso</div>
+                <div class="kpi-lbl">En Proceso</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background:#DCFCE7">✅</div>
+            <div>
+                <div class="kpi-val" style="color:#166534">@resueltas</div>
+                <div class="kpi-lbl">Resueltas</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background:#FEE2E2">🔴</div>
+            <div>
+                <div class="kpi-val" style="color:#991B1B">@alta</div>
+                <div class="kpi-lbl">Prioridad Alta activas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent table -->
+<div class="card">
+    <div class="card-header">
+        <span>📌</span> Solicitudes recientes sin cerrar
+        <a asp-controller="Solicitudes" asp-action="Index" class="ms-auto btn-somex btn-sm" style="font-size:.8rem;padding:.35rem .9rem">Ver todas</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-somex table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>#</th><th>Título</th><th>Categoría</th><th>Prioridad</th><th>Estado</th><th>Creada</th><th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in ultimas)
+                {
+                    var pCss = s.Prioridad == "Alta" ? "badge-alta" : s.Prioridad == "Media" ? "badge-media" : "badge-baja";
+                    var eCss = s.Estado == "Abierta" ? "badge-abierta" : s.Estado == "En Proceso" ? "badge-enproceso" : "badge-resuelta";
+                    <tr>
+                        <td class="text-muted small">#@s.SolicitudId</td>
+                        <td class="fw-600">@s.Titulo</td>
+                        <td>@(s.Categoria?.Nombre ?? "—")</td>
+                        <td><span class="badge rounded-pill @pCss">@s.Prioridad</span></td>
+                        <td><span class="badge rounded-pill @eCss">@s.Estado</span></td>
+                        <td class="text-muted small">@s.FechaCreacion.ToString("dd/MM/yy HH:mm")</td>
+                        <td>
+                            <a asp-controller="Solicitudes" asp-action="Details" asp-route-id="@s.SolicitudId"
+                               class="btn-somex-out btn-sm" style="font-size:.78rem;padding:.3rem .8rem">Ver</a>
+                        </td>
+                    </tr>
+                }
+                @if (!ultimas.Any())
+                {
+                    <tr><td colspan="7" class="text-center text-muted py-4">No hay solicitudes activas</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row g-3 mt-2">
+    <div class="col-md-4">
+        <a asp-controller="Solicitudes" asp-action="Create" class="btn-somex d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 text-decoration-none w-100">
+            ➕ Nueva Solicitud
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Solicitudes" asp-action="Reporte" class="btn-somex-lime d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 text-decoration-none w-100">
+            📊 Reporte Analistas
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Usuarios" asp-action="Index" class="btn-somex-out d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 text-decoration-none w-100">
+            👥 Gestionar Usuarios
+        </a>
+    </div>
 </div>

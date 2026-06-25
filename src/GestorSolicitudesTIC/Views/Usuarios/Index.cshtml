@@ -1,0 +1,62 @@
+@model IEnumerable<GestorSolicitudesTIC.Models.Usuario>
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="page-header">
+    <h1>Usuarios</h1>
+    <a asp-action="Create" class="btn-somex">+ Nuevo usuario</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-somex table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Área</th>
+                    <th>Correo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td class="text-muted small">@u.UsuarioId</td>
+                        <td class="fw-semibold">@u.Nombre</td>
+                        <td>@u.Area</td>
+                        <td class="text-muted small">@u.Correo</td>
+                        <td>
+                            @if (u.Activo)
+                            {
+                                <span class="badge rounded-pill badge-resuelta">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill badge-cerrada">Inactivo</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a asp-action="Edit" asp-route-id="@u.UsuarioId"
+                                   class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.75rem">Editar</a>
+                                @if (u.Activo)
+                                {
+                                    <button onclick="confirmarEliminar('/Usuarios/Delete/@u.UsuarioId','@Html.Raw(u.Nombre.Replace("'","\\\'"))')"
+                                            class="btn btn-sm btn-outline-danger rounded-pill" style="font-size:.75rem">Desactivar</button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-4">No hay usuarios registrados.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

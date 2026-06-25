@@ -1,0 +1,63 @@
+@model GestorSolicitudesTIC.Models.Analista
+@{
+    ViewData["Title"] = "Editar Analista";
+}
+
+<div class="page-header">
+    <h1>Editar Analista</h1>
+    <a asp-action="Index" class="btn-somex-out">← Volver</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">✏️ Editar datos</div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="AnalistaId" />
+                    <div asp-validation-summary="ModelOnly" class="alert-err mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label">Nombre completo <span class="text-danger">*</span></label>
+                        <input asp-for="Nombre" class="form-control" maxlength="100" required />
+                        <span asp-validation-for="Nombre" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Especialidad" class="form-label">Especialidad <span class="text-danger">*</span></label>
+                        <select asp-for="Especialidad" class="form-select" required>
+                            <option value="">— Seleccione —</option>
+                            <option>Hardware</option>
+                            <option>Software</option>
+                            <option>Redes</option>
+                            <option>Seguridad</option>
+                            <option>Bases de datos</option>
+                            <option>Soporte general</option>
+                        </select>
+                        <span asp-validation-for="Especialidad" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Correo" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
+                        <input asp-for="Correo" type="email" class="form-control" required />
+                        <span asp-validation-for="Correo" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input asp-for="Activo" class="form-check-input" type="checkbox" />
+                            <label asp-for="Activo" class="form-check-label">Analista activo</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-action="Index" class="btn btn-light rounded-pill">Cancelar</a>
+                        <button type="submit" class="btn-somex">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

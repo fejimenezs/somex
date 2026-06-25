@@ -1,0 +1,110 @@
+@model GestorSolicitudesTIC.ViewModels.SolicitudFiltroViewModel
+@{
+    ViewData["Title"] = "Solicitudes";
+}
+
+<div class="page-header">
+    <h1>Solicitudes TIC</h1>
+    <a asp-action="Create" class="btn-somex">+ Nueva solicitud</a>
+</div>
+
+<!-- Filtros -->
+<form method="get" asp-action="Index">
+    <div class="filter-bar">
+        <div class="fg">
+            <label>Estado</label>
+            <select name="estado" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                @foreach (var e in new[]{"Abierta","En Proceso","Resuelta","Cerrada"})
+                {
+                    <option value="@e" selected="@(Model.Estado == e ? "selected" : null)">@e</option>
+                }
+            </select>
+        </div>
+        <div class="fg">
+            <label>Prioridad</label>
+            <select name="prioridad" class="form-select form-select-sm">
+                <option value="">Todas</option>
+                @foreach (var p in new[]{"Alta","Media","Baja"})
+                {
+                    <option value="@p" selected="@(Model.Prioridad == p ? "selected" : null)">@p</option>
+                }
+            </select>
+        </div>
+        <div class="fg">
+            <label>Desde</label>
+            <input type="date" name="desde" value="@(Model.FechaDesde?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" />
+        </div>
+        <div class="fg">
+            <label>Hasta</label>
+            <input type="date" name="hasta" value="@(Model.FechaHasta?.ToString("yyyy-MM-dd"))" class="form-control form-control-sm" />
+        </div>
+        <div>
+            <button type="submit" class="btn-somex" style="font-size:.82rem;padding:.42rem 1rem">Filtrar</button>
+            <a asp-action="Index" class="btn btn-sm btn-light rounded-pill ms-1">Limpiar</a>
+        </div>
+    </div>
+</form>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-somex table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Usuario</th>
+                    <th>Analista</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Fecha creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.Solicitudes)
+                {
+                    var pCss = s.Prioridad == "Alta" ? "badge-alta" : s.Prioridad == "Media" ? "badge-media" : "badge-baja";
+                    var eCss = s.Estado switch {
+                        "Abierta"    => "badge-abierta",
+                        "En Proceso" => "badge-enproceso",
+                        "Resuelta"   => "badge-resuelta",
+                        _            => "badge-cerrada"
+                    };
+                    <tr>
+                        <td class="text-muted small">#@s.SolicitudId</td>
+                        <td class="fw-semibold">@s.Titulo</td>
+                        <td>@(s.Categoria?.Nombre ?? "—")</td>
+                        <td>@(s.Usuario?.Nombre ?? "—")</td>
+                        <td>
+                            @if (s.Analista != null) { @s.Analista.Nombre }
+                            else { <em class="text-muted small">Sin asignar</em> }
+                        </td>
+                        <td><span class="badge rounded-pill @pCss">@s.Prioridad</span></td>
+                        <td><span class="badge rounded-pill @eCss">@s.Estado</span></td>
+                        <td class="text-muted small">@s.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <a asp-action="Details" asp-route-id="@s.SolicitudId"
+                                   class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size:.75rem">Ver</a>
+                                @if (s.Estado != "Cerrada")
+                                {
+                                    <a asp-action="CambiarEstado" asp-route-id="@s.SolicitudId"
+                                       class="btn btn-sm rounded-pill" style="font-size:.75rem;background:#E8F5E9;color:#166534;border:1px solid #86EFAC">Estado</a>
+                                    <button type="button" onclick="confirmarEliminar('/Solicitudes/Delete/@s.SolicitudId','@Html.Raw(s.Titulo.Replace("'","\\\'"))')"
+                                            class="btn btn-sm btn-outline-danger rounded-pill" style="font-size:.75rem">✕</button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Solicitudes.Any())
+                {
+                    <tr><td colspan="9" class="text-center text-muted py-4">No hay solicitudes con los filtros seleccionados.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-2 text-muted small">@Model.Solicitudes.Count() solicitud(es) encontrada(s)</div>

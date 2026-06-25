@@ -1,0 +1,133 @@
+@model GestorSolicitudesTIC.Models.Solicitud
+@{
+    ViewData["Title"] = "Detalle #" + Model.SolicitudId;
+    var pCss = Model.Prioridad == "Alta" ? "badge-alta" : Model.Prioridad == "Media" ? "badge-media" : "badge-baja";
+    var eCss = Model.Estado switch {
+        "Abierta"    => "badge-abierta",
+        "En Proceso" => "badge-enproceso",
+        "Resuelta"   => "badge-resuelta",
+        _            => "badge-cerrada"
+    };
+}
+
+<div class="page-header">
+    <h1>Solicitud #@Model.SolicitudId</h1>
+    <div class="d-flex gap-2">
+        @if (Model.Estado != "Cerrada")
+        {
+            <a asp-action="CambiarEstado" asp-route-id="@Model.SolicitudId" class="btn-somex">Cambiar estado</a>
+        }
+        <a asp-action="Index" class="btn-somex-out">← Lista</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Info principal -->
+    <div class="col-lg-8">
+        <div class="card mb-3">
+            <div class="card-header">📄 Información de la solicitud</div>
+            <div class="card-body">
+                <h5 class="fw-bold">@Model.Titulo</h5>
+                <p class="text-muted" style="white-space:pre-wrap">@Model.Descripcion</p>
+            </div>
+        </div>
+
+        <!-- Historial -->
+        <div class="card">
+            <div class="card-header">🕒 Historial de estados</div>
+            <div class="card-body">
+                @if (Model.Historial != null && Model.Historial.Any())
+                {
+                    <div class="timeline">
+                        @foreach (var h in Model.Historial.OrderByDescending(h => h.FechaCambio))
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">@h.FechaCambio.ToString("dd/MM/yyyy HH:mm") — <strong>@h.UsuarioCambio</strong></div>
+                                    <div>
+                                        @if (h.EstadoAnterior != null)
+                                        {
+                                            <span class="text-muted">@h.EstadoAnterior</span>
+                                            <span class="mx-1">→</span>
+                                        }
+                                        <strong>@h.EstadoNuevo</strong>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(h.Observacion))
+                                    {
+                                        <div class="text-muted small mt-1">@h.Observacion</div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center py-3">Sin movimientos de estado registrados.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar datos -->
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">🏷️ Clasificación</div>
+            <div class="card-body">
+                <dl class="row mb-0" style="font-size:.875rem">
+                    <dt class="col-5">Estado</dt>
+                    <dd class="col-7"><span class="badge rounded-pill @eCss">@Model.Estado</span></dd>
+                    <dt class="col-5">Prioridad</dt>
+                    <dd class="col-7"><span class="badge rounded-pill @pCss">@Model.Prioridad</span></dd>
+                    <dt class="col-5">Categoría</dt>
+                    <dd class="col-7">@(Model.Categoria?.Nombre ?? "—")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">👤 Personas</div>
+            <div class="card-body">
+                <dl class="row mb-0" style="font-size:.875rem">
+                    <dt class="col-5">Solicitante</dt>
+                    <dd class="col-7">
+                        @Model.Usuario?.Nombre<br/>
+                        <span class="text-muted small">@Model.Usuario?.Area</span>
+                    </dd>
+                    <dt class="col-5">Analista</dt>
+                    <dd class="col-7">
+                        @if (Model.Analista != null)
+                        {
+                            @Model.Analista.Nombre<br/>
+                            <span class="text-muted small">@Model.Analista.Especialidad</span>
+                        }
+                        else
+                        {
+                            <em class="text-muted">Sin asignar</em>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">📅 Fechas</div>
+            <div class="card-body">
+                <dl class="row mb-0" style="font-size:.875rem">
+                    <dt class="col-5">Creación</dt>
+                    <dd class="col-7">@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+                    <dt class="col-5">Últ. modif.</dt>
+                    <dd class="col-7">@Model.FechaUltModif.ToString("dd/MM/yyyy HH:mm")</dd>
+                    @if (Model.FechaCierre.HasValue)
+                    {
+                        <dt class="col-5">Cierre</dt>
+                        <dd class="col-7">@Model.FechaCierre.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                        <dt class="col-5">Duración</dt>
+                        <dd class="col-7">@((Model.FechaCierre.Value - Model.FechaCreacion).TotalHours.ToString("F1")) h</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

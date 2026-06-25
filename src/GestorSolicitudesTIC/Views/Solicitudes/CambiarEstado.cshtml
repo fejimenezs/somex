@@ -1,0 +1,76 @@
+@model GestorSolicitudesTIC.ViewModels.CambiarEstadoViewModel
+@{
+    ViewData["Title"] = "Cambiar Estado";
+}
+
+<div class="page-header">
+    <h1>Cambiar Estado — Solicitud #@Model.SolicitudId</h1>
+    <a asp-action="Details" asp-route-id="@Model.SolicitudId" class="btn-somex-out">← Volver</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">⚙️ Transición de estado</div>
+            <div class="card-body p-4">
+
+                <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3" style="background:#F7F8F5">
+                    <div>
+                        <div class="text-muted small">Estado actual</div>
+                        <span class="badge rounded-pill fs-6 mt-1
+                            @(Model.EstadoActual == "Abierta" ? "badge-abierta" :
+                              Model.EstadoActual == "En Proceso" ? "badge-enproceso" :
+                              Model.EstadoActual == "Resuelta" ? "badge-resuelta" : "badge-cerrada")">
+                            @Model.EstadoActual
+                        </span>
+                    </div>
+                    <div style="font-size:1.5rem;color:#8DC63F">→</div>
+                    <div>
+                        <div class="text-muted small">Nuevo estado</div>
+                        <div class="fw-bold text-success">Seleccione abajo</div>
+                    </div>
+                </div>
+
+                <form asp-action="CambiarEstado" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="SolicitudId" />
+                    <input type="hidden" asp-for="EstadoActual" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert-err mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nuevo estado <span class="text-danger">*</span></label>
+                        <select asp-for="EstadoNuevo" asp-items="Model.EstadosSiguientes" class="form-select" required>
+                            <option value="">— Seleccione estado —</option>
+                        </select>
+                        <span asp-validation-for="EstadoNuevo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Asignar / cambiar analista</label>
+                        <select asp-for="AnalistaId" asp-items="Model.Analistas" class="form-select">
+                            <option value="">— Sin cambio —</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Observacion" class="form-label">Observación</label>
+                        <textarea asp-for="Observacion" id="txtObs" class="form-control" rows="3" maxlength="500"
+                                  placeholder="Explique brevemente el motivo del cambio..."></textarea>
+                        <div class="char-counter" id="cntObs"></div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-action="Details" asp-route-id="@Model.SolicitudId" class="btn btn-light rounded-pill">Cancelar</a>
+                        <button type="submit" class="btn-somex">Confirmar cambio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>initCharCounter('txtObs','cntObs',500);</script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

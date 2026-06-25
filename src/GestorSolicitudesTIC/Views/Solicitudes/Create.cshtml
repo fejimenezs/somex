@@ -1,0 +1,87 @@
+@model GestorSolicitudesTIC.ViewModels.SolicitudViewModel
+@{
+    ViewData["Title"] = "Nueva Solicitud";
+}
+
+<div class="page-header">
+    <h1>Nueva Solicitud</h1>
+    <a asp-action="Index" class="btn-somex-out">← Volver</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">📝 Datos de la solicitud</div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert-err mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Solicitud.Titulo" class="form-label">Título <span class="text-danger">*</span></label>
+                        <input asp-for="Solicitud.Titulo" id="txtTitulo" class="form-control" maxlength="150"
+                               placeholder="Descripción breve del problema o solicitud" required />
+                        <div class="char-counter" id="cntTitulo"></div>
+                        <span asp-validation-for="Solicitud.Titulo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Solicitud.Descripcion" class="form-label">Descripción detallada <span class="text-danger">*</span></label>
+                        <textarea asp-for="Solicitud.Descripcion" id="txtDesc" class="form-control" rows="4" maxlength="1000"
+                                  placeholder="Detalle el problema, pasos para reproducirlo, equipos afectados..." required></textarea>
+                        <div class="char-counter" id="cntDesc"></div>
+                        <span asp-validation-for="Solicitud.Descripcion" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="Solicitud.CategoriaId" class="form-label">Categoría <span class="text-danger">*</span></label>
+                            <select asp-for="Solicitud.CategoriaId" asp-items="Model.Categorias" class="form-select" required>
+                                <option value="">— Seleccione —</option>
+                            </select>
+                            <span asp-validation-for="Solicitud.CategoriaId" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Solicitud.Prioridad" class="form-label">Prioridad <span class="text-danger">*</span></label>
+                            <select asp-for="Solicitud.Prioridad" class="form-select" required>
+                                <option value="">— Seleccione —</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Media">Media</option>
+                                <option value="Baja">Baja</option>
+                            </select>
+                            <span asp-validation-for="Solicitud.Prioridad" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Solicitud.UsuarioId" class="form-label">Usuario solicitante <span class="text-danger">*</span></label>
+                            <select asp-for="Solicitud.UsuarioId" asp-items="Model.Usuarios" class="form-select" required>
+                                <option value="">— Seleccione —</option>
+                            </select>
+                            <span asp-validation-for="Solicitud.UsuarioId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Solicitud.AnalistaId" class="form-label">Asignar analista (opcional)</label>
+                        <select asp-for="Solicitud.AnalistaId" asp-items="Model.Analistas" class="form-select">
+                            <option value="">— Sin asignar por ahora —</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-action="Index" class="btn btn-light rounded-pill">Cancelar</a>
+                        <button type="submit" class="btn-somex">Crear solicitud</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        initCharCounter('txtTitulo','cntTitulo',150);
+        initCharCounter('txtDesc','cntDesc',1000);
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
