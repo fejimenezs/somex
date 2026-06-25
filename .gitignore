@@ -1,0 +1,55 @@
+## .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.swp
+*.sln.docstates
+
+## Build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Visual Studio
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+
+## Secrets y configuración local
+appsettings.Development.json
+appsettings.Local.json
+*.pfx
+*.p12
+secrets.json
+
+## Publicación
+publish/
+**/publish/
+
+## Archivos temporales
+*.tmp
+*.temp
+Thumbs.db
+.DS_Store
