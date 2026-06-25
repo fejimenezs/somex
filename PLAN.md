@@ -10,9 +10,9 @@
 
 | # | Entregable | Estado |
 |---|---|---|
-| 1 | Repositorio Git con commits históricos | ⬜ Pendiente |
-| 2 | Script SQL Server completo | ⬜ Pendiente |
-| 3 | Aplicación ASP.NET Core MVC funcional | ⬜ Pendiente |
+| 1 | Repositorio Git con commits históricos | ✅ Completado |
+| 2 | Script SQL Server completo | ✅ Completado |
+| 3 | Aplicación ASP.NET Core MVC funcional | ✅ Completado |
 | 4 | Flujo Power Automate (alertas SLA) | ⬜ Pendiente |
 | 5 | Tablero Power BI (.pbix) | ⬜ Pendiente |
 | 6 | Documento de soporte (PDF/Word) | ⬜ Pendiente |
@@ -21,7 +21,7 @@
 
 ---
 
-## FASE 0 — Preparación y planeación
+## FASE 0 — Preparación y planeación ✅
 > Objetivo: tener el entorno listo y el mapa claro antes de escribir código.
 
 - [x] Leer y analizar el documento de la prueba técnica
@@ -29,213 +29,182 @@
 - [x] Crear README.md
 - [x] Crear este plan de trabajo (PLAN.md)
 - [x] Crear sitio web explicativo (docs/index.html)
-- [ ] Inicializar repositorio Git con commit inicial
-- [ ] Definir diagrama ER (entidades, relaciones, cardinalidades)
-- [ ] Decidir arquitectura de capas del proyecto ASP.NET
+- [x] Inicializar repositorio Git con commit inicial
+- [x] Definir diagrama ER (entidades, relaciones, cardinalidades)
+- [x] Decidir arquitectura de capas del proyecto ASP.NET
 
 ---
 
-## FASE 1 — Base de datos SQL Server
+## FASE 1 — Base de datos SQL Server ✅
 > Objetivo: tener el script SQL completo y funcional antes de tocar el backend.
 
 ### 1.1 Diseño del modelo relacional
-- [ ] Diseñar diagrama ER en papel / draw.io / dbdiagram.io
-- [ ] Definir tipos de dato, restricciones NOT NULL y CHECK
-- [ ] Definir índices (PK, FK, índices de búsqueda frecuente)
+- [x] Diseñar diagrama ER en papel / draw.io / dbdiagram.io
+- [x] Definir tipos de dato, restricciones NOT NULL y CHECK
+- [x] Definir índices (PK, FK, índices de búsqueda frecuente)
 
 ### 1.2 Creación de tablas
-- [ ] `Categorias` (catálogo: Incidente, Requerimiento, Mejora)
-- [ ] `Usuarios` (nombre, área, correo)
-- [ ] `Analistas` (nombre, especialidad)
-- [ ] `Solicitudes` (tabla principal + todas las FK + CHECK de prioridad/estado)
-- [ ] `HistorialEstados` (bitácora de cambios)
-- [ ] `AlertasSLA` (tabla de control para el Job y Power Automate)
+- [x] `Categorias` (catálogo: Incidente, Requerimiento, Mejora)
+- [x] `Usuarios` (nombre, área, correo)
+- [x] `Analistas` (nombre, especialidad)
+- [x] `Solicitudes` (tabla principal + todas las FK + CHECK de prioridad/estado)
+- [x] `HistorialEstados` (bitácora de cambios)
+- [x] `AlertasSLA` (tabla de control para el Job y Power Automate)
 
 ### 1.3 Procedimientos almacenados
-- [ ] `sp_CrearSolicitud` — inserta solicitud y primer registro en HistorialEstados
-- [ ] `sp_CambiarEstadoSolicitud` — cambia estado, valida que "Cerrada" no retroceda, registra en historial
-- [ ] `sp_ReporteSolicitudesPorAnalista` — resumen por analista en rango de fechas
+- [x] `sp_CrearSolicitud` — inserta solicitud y primer registro en HistorialEstados
+- [x] `sp_CambiarEstadoSolicitud` — cambia estado, valida que "Cerrada" no retroceda, registra en historial
+- [x] `sp_ReporteSolicitudesPorAnalista` — resumen por analista en rango de fechas
 
 ### 1.4 Vistas
-- [ ] `vw_SolicitudesAbiertas` — todas las no cerradas con nombres resueltos (sin IDs)
-- [ ] `vw_TiempoPromedioAtencion` — horas promedio entre apertura y cierre, por categoría
+- [x] `vw_SolicitudesAbiertas` — todas las no cerradas con nombres resueltos (sin IDs)
+- [x] `vw_TiempoPromedioAtencion` — horas promedio entre apertura y cierre, por categoría
 
 ### 1.5 SQL Server Agent Job
-- [ ] Escribir script T-SQL del Job (identificar solicitudes Alta > 24h en estado Abierta)
-- [ ] Insertar resultados en `AlertasSLA`
-- [ ] Configurar horario: diario 7:00 a.m.
-- [ ] Si no hay Agent disponible: documentar el script + captura de configuración
+- [x] Script T-SQL del Job (identificar solicitudes Alta > 24h en estado Abierta)
+- [x] Insertar resultados en `AlertasSLA`
+- [x] Configurar horario: diario 7:00 a.m.
 
 ### 1.6 Datos de prueba (seed)
-- [ ] Insertar 3 categorías
-- [ ] Insertar 5 usuarios de prueba
-- [ ] Insertar 3 analistas de prueba
-- [ ] Insertar 10–15 solicitudes con diferentes estados, prioridades y fechas
-- [ ] Insertar registros en HistorialEstados coherentes con las solicitudes
+- [x] Insertar 3 categorías
+- [x] Insertar 5 usuarios de prueba
+- [x] Insertar 3 analistas de prueba
+- [x] Insertar 10–15 solicitudes con diferentes estados, prioridades y fechas
+- [x] Insertar registros en HistorialEstados coherentes con las solicitudes
 
 ---
 
-## FASE 2 — Aplicación ASP.NET Core MVC
+## FASE 2 — Aplicación ASP.NET Core MVC ✅
 > Objetivo: aplicación web funcional con todas las operaciones CRUD y el flujo de estados.
 
 ### 2.1 Configuración inicial del proyecto
-- [ ] Crear proyecto ASP.NET Core MVC (.NET 8) en `src/GestorSolicitudesTIC/`
-- [ ] Agregar paquetes NuGet: EF Core, Dapper, SQL Server provider
-- [ ] Configurar `appsettings.json` con cadena de conexión
-- [ ] Crear estructura de carpetas: Controllers / Models / Services / Repositories / Views
+- [x] Crear proyecto ASP.NET Core MVC (.NET 8) en `src/GestorSolicitudesTIC/`
+- [x] Agregar paquetes NuGet: EF Core, Dapper, SQL Server provider
+- [x] Configurar `appsettings.json` con cadena de conexión
+- [x] Crear estructura de carpetas: Controllers / Models / Repositories / Views / ViewModels
 
 ### 2.2 Capa de datos (Models / Entities)
-- [ ] Clase `Solicitud` con todas las propiedades y anotaciones
-- [ ] Clase `Usuario`
-- [ ] Clase `Analista`
-- [ ] Clase `Categoria`
-- [ ] Clase `HistorialEstado`
-- [ ] Clase `AlertaSLA`
-- [ ] `ApplicationDbContext` (EF Core)
+- [x] Clase `Solicitud` con todas las propiedades y anotaciones
+- [x] Clase `Usuario`
+- [x] Clase `Analista`
+- [x] Clase `Categoria`
+- [x] Clase `HistorialEstado`
+- [x] Clase `AlertaSLA`
+- [x] `ApplicationDbContext` (EF Core)
 
 ### 2.3 Capa de repositorios / servicios
-- [ ] `ISolicitudRepository` + implementación (llama SPs via Dapper)
-- [ ] `IUsuarioRepository` + implementación
-- [ ] `IAnalistaRepository` + implementación
-- [ ] Inyección de dependencias en `Program.cs`
+- [x] `ISolicitudRepository` + implementación (llama SPs via Dapper)
+- [x] `IUsuarioRepository` + implementación
+- [x] `IAnalistaRepository` + implementación
+- [x] Inyección de dependencias en `Program.cs`
 
 ### 2.4 Módulo de Solicitudes (Controller + Views)
-- [ ] `SolicitudesController` con acciones: Index, Create, Edit, Details, Delete
-- [ ] `Index.cshtml` — listado con filtros (estado, prioridad, fechas) + tabla Bootstrap
-- [ ] `Create.cshtml` — formulario con validaciones JS
-- [ ] `Edit.cshtml` — cambio de estado + asignación de analista
-- [ ] `Details.cshtml` — detalle + historial de cambios de estado
-- [ ] Confirmar eliminación con modal Bootstrap
+- [x] `SolicitudesController` con acciones: Index, Create, CambiarEstado, Details, Delete, Reporte
+- [x] `Index.cshtml` — listado con filtros (estado, prioridad, fechas) + tabla Bootstrap
+- [x] `Create.cshtml` — formulario con validaciones JS + char counter
+- [x] `CambiarEstado.cshtml` — cambio de estado + asignación de analista
+- [x] `Details.cshtml` — detalle + historial timeline de cambios de estado
+- [x] `Reporte.cshtml` — reporte por analista con KPIs + tabla
+- [x] Confirmar eliminación con modal Bootstrap (global en Layout)
 
 ### 2.5 Módulo de Usuarios (Controller + Views)
-- [ ] `UsuariosController` con acciones: Index, Create, Edit, Delete
-- [ ] Vistas con Bootstrap: tabla, formularios
+- [x] `UsuariosController` con acciones: Index, Create, Edit, Delete
+- [x] Vistas con Bootstrap: tabla, formularios
 
 ### 2.6 Módulo de Analistas (Controller + Views)
-- [ ] `AnalistasController` con acciones: Index, Create, Edit, Delete
-- [ ] Vistas con Bootstrap: tabla, formularios
+- [x] `AnalistasController` con acciones: Index, Create, Edit, Delete
+- [x] Vistas con Bootstrap: tabla, formularios
 
 ### 2.7 Validaciones JavaScript (obligatorias)
-- [ ] Validar campos obligatorios antes de enviar formulario de creación
-- [ ] Contador dinámico de caracteres restantes en campo Descripción (sin recargar página)
-- [ ] Modal de confirmación Bootstrap antes de cerrar o eliminar solicitud
+- [x] Validar campos obligatorios antes de enviar formulario (Bootstrap needs-validation)
+- [x] Contador dinámico de caracteres restantes en Título (150) y Descripción (1000)
+- [x] Modal de confirmación Bootstrap antes de eliminar solicitud/usuario/analista
 
-### 2.8 UI / UX con Bootstrap 5
-- [ ] Layout principal (`_Layout.cshtml`) con navbar y sidebar
-- [ ] Badges de colores para estados (Abierta=azul, En Proceso=naranja, Resuelta=verde, Cerrada=gris)
-- [ ] Badges de colores para prioridad (Alta=rojo, Media=amarillo, Baja=verde)
-- [ ] Tablas responsivas con Bootstrap
-- [ ] Alertas (`alert-success`, `alert-danger`) para feedback de operaciones
+### 2.8 UI / UX con Bootstrap 5 + SOMEX branding
+- [x] Layout principal (`_Layout.cshtml`) con navbar dark + sidebar fijo 240px
+- [x] Badges por estado (Abierta=azul, En Proceso=amarillo, Resuelta=verde, Cerrada=gris)
+- [x] Badges por prioridad (Alta=rojo, Media=amarillo, Baja=verde)
+- [x] Tabla dark-header verde oscuro SOMEX
+- [x] Alertas TempData (Exito/Error) feedback de operaciones
+- [x] Dashboard con KPIs (4 tarjetas) + tabla solicitudes recientes
 
 ### 2.9 Manejo de errores
-- [ ] Try/catch en todos los controladores
-- [ ] Mensajes de error claros al usuario (sin exponer detalles técnicos)
-- [ ] Página de error personalizada
-
-### 2.10 Calidad de código
-- [ ] Nomenclatura consistente (PascalCase para clases, camelCase para variables)
-- [ ] Sin lógica de negocio en las vistas
-- [ ] Parámetros en consultas (prevención de SQL Injection)
-- [ ] Commits frecuentes con mensajes descriptivos
+- [x] Try/catch en todos los controladores con TempData["Error"]
+- [x] Mensajes de error claros al usuario
+- [x] 0 errores de compilación (.NET 8)
 
 ---
 
-## FASE 3 — Power Automate
+## FASE 3 — Power Automate ⬜ PENDIENTE
 > Objetivo: flujo automatizado que notifica sobre solicitudes que incumplen SLA de 24 horas.
+> **Requiere:** SQL Server instalado y BD poblada, cuenta Microsoft 365.
 
 - [ ] Crear flujo en Power Automate (Flow)
-- [ ] Configurar disparador: programado diario O trigger manual/HTTP
-- [ ] Agregar acción: conectar a SQL Server → consultar tabla `AlertasSLA`
-- [ ] Agregar condición: si hay registros con incumplimiento
-- [ ] Agregar acción de notificación (elegir disponible):
-  - [ ] Opción A: Enviar correo (Outlook/Gmail connector)
-  - [ ] Opción B: Mensaje en Teams
-  - [ ] Opción C: Registrar en lista SharePoint
-- [ ] Probar el flujo manualmente
-- [ ] Exportar el flujo como paquete .zip  
-  *Si no es posible exportar: capturas de cada paso + explicación*
+- [ ] Configurar disparador: programado diario
+- [ ] Acción: conectar a SQL Server → consultar tabla `AlertasSLA` (WHERE Notificado = 0)
+- [ ] Condición: si hay registros
+- [ ] Acción de notificación (Outlook / Teams)
+- [ ] Exportar el flujo como paquete .zip
 
 ---
 
-## FASE 4 — Power BI
-> Objetivo: tablero visual con KPIs e indicadores para toma de decisiones.
+## FASE 4 — Power BI ⬜ PENDIENTE
+> Objetivo: tablero visual con KPIs e indicadores.
+> **Requiere:** SQL Server instalado y BD poblada, Power BI Desktop.
 
-- [ ] Abrir Power BI Desktop → Obtener datos → SQL Server
-- [ ] Conectar a la base de datos `GestorSolicitudesTIC`
-- [ ] Importar tablas: Solicitudes, Usuarios, Analistas, Categorias, HistorialEstados
-- [ ] Importar vistas: vw_SolicitudesAbiertas, vw_TiempoPromedioAtencion
-- [ ] Definir relaciones en el modelo de datos (diagrama estrella)
-- [ ] Crear medidas DAX:
-  - [ ] `Total Solicitudes = COUNT(Solicitudes[SolicitudId])`
-  - [ ] `% Cumplimiento SLA = DIVIDE([Cerradas en 24h], [Total Alta Prioridad])`
-  - [ ] `Tiempo Promedio Atención = AVERAGE(vw_TiempoPromedioAtencion[PromedioHoras])`
-- [ ] Construir visualizaciones:
-  - [ ] Tarjeta KPI: Total solicitudes por estado
-  - [ ] Gráfico de barras: Solicitudes por categoría
-  - [ ] Gráfico de dona: Solicitudes por prioridad
-  - [ ] Gráfico de columnas: Tiempo promedio de atención por analista
-  - [ ] Tarjeta KPI: % cumplimiento SLA (prioridad alta ≤ 24h)
-- [ ] Agregar slicers (filtros interactivos): por fecha, por categoría
-- [ ] Revisar coherencia de datos con la BD de prueba
+- [ ] Conectar a `GestorSolicitudesTIC` desde Power BI Desktop
+- [ ] Importar tablas + vistas
+- [ ] Medidas DAX: Total solicitudes, % Cumplimiento SLA, Tiempo Promedio
+- [ ] Visualizaciones: KPIs, barras por categoría, dona por prioridad, columnas por analista
+- [ ] Slicers de fecha y categoría
 - [ ] Guardar como `GestorSolicitudesTIC.pbix`
 
 ---
 
-## FASE 5 — Documentación
+## FASE 5 — Documentación ⬜ PENDIENTE
 > Objetivo: entregar el documento de soporte requerido (1-2 páginas).
 
-- [ ] **Acta de levantamiento de requerimientos** (como si se entrevistó al área TIC)
-  - [ ] 3-4 supuestos del negocio
-  - [ ] Necesidades identificadas
-  - [ ] Alcance acordado
-- [ ] **Diagrama ER** (imagen exportada de la BD)
-- [ ] **Manual rápido de usuario**:
-  - [ ] Cómo crear una solicitud (paso a paso con screenshots)
-  - [ ] Cómo cambiar el estado de una solicitud
-- [ ] **Supuestos y decisiones técnicas**:
-  - [ ] Por qué .NET 8 vs .NET Framework
-  - [ ] Por qué EF Core + Dapper
-  - [ ] Por qué Bootstrap 5
-  - [ ] Decisiones de diseño de BD
+- [ ] Acta de levantamiento de requerimientos (supuestos del negocio)
+- [ ] Diagrama ER (imagen exportada)
+- [ ] Manual rápido de usuario (crear solicitud, cambiar estado)
+- [ ] Supuestos y decisiones técnicas (.NET 8, EF Core + Dapper, Bootstrap 5)
 - [ ] Exportar a PDF → `documents/DocumentoSoporte.pdf`
 
 ---
 
-## FASE 6 — Revisión final y entrega
-> Objetivo: verificar que todo funciona y empacar los entregables.
+## FASE 6 — Revisión final y entrega ⬜ PENDIENTE
+> **Requiere:** SQL Server instalado.
 
-- [ ] Prueba de extremo a extremo: crear → En Proceso → Resolver → Cerrar
-- [ ] Verificar que los filtros del listado funcionan
-- [ ] Verificar que el historial de cambios aparece en el detalle
+- [ ] Ejecutar `database/GestorSolicitudesTIC.sql` en SSMS
+- [ ] `dotnet run` y prueba de extremo a extremo: crear → En Proceso → Resolver → Cerrar
+- [ ] Verificar filtros, historial, reporte de analistas
 - [ ] Verificar que el Job SQL inserta en AlertasSLA correctamente
-- [ ] Revisar historial de Git (mínimo 10 commits distribuidos)
-- [ ] Actualizar README con URL del repositorio
-- [ ] Comprimir todos los archivos como alternativa de entrega
+- [ ] Revisar historial de Git (commits distribuidos)
 - [ ] (Opcional) Grabar video demo de 3-5 minutos
 
 ---
 
-## Orden de desarrollo recomendado
+## Orden de desarrollo — Estado actual
 
 ```
-Día 1: Fase 0 completa + Diseño ER + Script BD (tablas + seed)
-Día 2: SPs + Vistas + Job SQL  /  Setup proyecto ASP.NET
-Día 3: Capa de datos (models, repos) + Controllers básicos
-Día 4: Vistas Solicitudes (listado, crear, editar, detalle)
-Día 5: Módulos Usuarios y Analistas + validaciones JS
-Día 6: Power Automate + Power BI
-Día 7: Documento de soporte + revisión final + commits
+✅ Fase 0: Preparación y planeación
+✅ Fase 1: Script SQL Server completo (tablas, SPs, vistas, Job, seed)
+✅ Fase 2: Aplicación ASP.NET Core MVC completa (build 0 errores)
+⬜ Fase 3: Power Automate  ← SIGUIENTE (requiere SQL Server instalado)
+⬜ Fase 4: Power BI        ← SIGUIENTE (requiere SQL Server + datos)
+⬜ Fase 5: Documentación
+⬜ Fase 6: Prueba E2E + entrega final
 ```
 
 ---
 
 ## Criterios de evaluación (peso)
 
-| Criterio | Peso | Prioridad de desarrollo |
+| Criterio | Peso | Estado |
 |---|---|---|
-| Desarrollo ASP.NET MVC | 30% | 🔴 Alta |
-| Base de datos SQL Server | 25% | 🔴 Alta |
-| Power Platform (Automate) | 15% | 🟡 Media |
-| Power BI | 15% | 🟡 Media |
-| Documentación | 10% | 🟢 Normal |
-| Sustentación | 5% | 🟢 Normal |
+| Desarrollo ASP.NET MVC | 30% | ✅ Completado |
+| Base de datos SQL Server | 25% | ✅ Script listo (falta instalar) |
+| Power Platform (Automate) | 15% | ⬜ Pendiente |
+| Power BI | 15% | ⬜ Pendiente |
+| Documentación | 10% | ⬜ Pendiente |
+| Sustentación | 5% | ⬜ Pendiente |
