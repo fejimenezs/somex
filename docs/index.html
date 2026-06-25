@@ -3,147 +3,363 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestor de Solicitudes TIC — ¿Cómo funciona?</title>
+  <title>Gestor TIC — SOMEX®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Reset & base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── Variables SOMEX Brand ───────────────────────────────────── */
     :root {
-      --blue:    #2563EB;
-      --blue-lt: #EFF6FF;
-      --orange:  #F59E0B;
-      --green:   #10B981;
-      --red:     #EF4444;
-      --gray:    #6B7280;
-      --gray-lt: #F9FAFB;
-      --dark:    #111827;
-      --radius:  12px;
+      --green:      #1CAE27;
+      --green-dark: #0A3B0A;
+      --green-lime: #8DC63F;
+      --green-mid:  #148A1E;
+      --white:      #FFFFFF;
+      --gray-bg:    #F7F8F5;
+      --gray-light: #EEEEEE;
+      --text:       #1A1A1A;
+      --text-muted: #555555;
+      --radius-sm:  8px;
+      --radius-md:  16px;
+      --radius-pill:999px;
     }
+
+    /* ── Reset ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      color: var(--dark);
-      background: #fff;
+      font-family: 'Open Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
       line-height: 1.65;
     }
-    a { color: var(--blue); text-decoration: none; }
-    h1, h2, h3 { line-height: 1.25; }
-    img { display: block; max-width: 100%; }
+    h1, h2, h3, h4 {
+      font-family: 'Montserrat', sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
 
-    /* ─── Utilidades ────────────────────────────────────────────── */
-    .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+    /* ── Utilidades ─────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
     .section    { padding: 5rem 0; }
-    .section--alt { background: var(--gray-lt); }
+    .section--alt { background: var(--gray-bg); }
+    .section--dark {
+      background: var(--green-dark);
+      color: var(--white);
+    }
     .tag {
       display: inline-block;
+      font-family: 'Montserrat', sans-serif;
       font-size: .75rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--blue);
+      letter-spacing: .1em;
+      color: var(--green-lime);
       margin-bottom: .75rem;
     }
+    .divider {
+      width: 40px; height: 3px;
+      background: var(--green-lime);
+      border-radius: 2px;
+      margin: .75rem 0 1.5rem;
+    }
+
+    /* Badges de estado */
     .badge {
       display: inline-block;
-      padding: .25rem .75rem;
-      border-radius: 999px;
+      padding: .3rem .9rem;
+      border-radius: var(--radius-pill);
       font-size: .8rem;
-      font-weight: 600;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
     }
     .badge-blue   { background: #DBEAFE; color: #1E40AF; }
     .badge-orange { background: #FEF3C7; color: #92400E; }
     .badge-green  { background: #D1FAE5; color: #065F46; }
     .badge-gray   { background: #E5E7EB; color: #374151; }
-    .badge-red    { background: #FEE2E2; color: #991B1B; }
 
-    /* ─── Navbar ────────────────────────────────────────────────── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid #E5E7EB;
-      padding: 1rem 0;
-    }
-    nav .container { display: flex; align-items: center; justify-content: space-between; }
-    nav .logo { font-size: 1.1rem; font-weight: 700; color: var(--blue); }
-    nav .logo span { color: var(--dark); }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
-    nav ul a { font-size: .9rem; color: var(--gray); font-weight: 500; }
-    nav ul a:hover { color: var(--blue); }
-
-    /* ─── Hero ──────────────────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(135deg, #EFF6FF 0%, #F0FDF4 100%);
-      padding: 6rem 0 4rem;
-      text-align: center;
-    }
-    .hero .eyebrow {
-      font-size: .85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--blue);
-      margin-bottom: 1rem;
-    }
-    .hero h1 { font-size: 2.75rem; margin-bottom: 1.25rem; }
-    .hero h1 span { color: var(--blue); }
-    .hero p { font-size: 1.15rem; color: var(--gray); max-width: 600px; margin: 0 auto 2rem; }
-    .hero .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    /* Botones */
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
       padding: .75rem 1.75rem;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: .95rem;
+      border-radius: var(--radius-pill);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
+      transition: transform .15s, box-shadow .15s, background .15s;
+      border: none;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
-    .btn-primary { background: var(--blue); color: #fff; }
-    .btn-outline { border: 2px solid var(--blue); color: var(--blue); }
-    .hero-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-top: 3rem;
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+    .btn-primary {
+      background: var(--green-lime);
+      color: var(--white);
     }
-    .hero-card {
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--white);
+      color: var(--white);
     }
-    .hero-card .icon { font-size: 2rem; margin-bottom: .5rem; }
-    .hero-card h3 { font-size: 1rem; margin-bottom: .25rem; }
-    .hero-card p  { font-size: .85rem; color: var(--gray); }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+    .btn-green {
+      background: var(--green);
+      color: var(--white);
+    }
 
-    /* ─── Sección: ¿Qué es? ─────────────────────────────────────── */
-    .what-grid {
+    /* ── Sidebar social ─────────────────────────────────────────── */
+    .social-sidebar {
+      position: fixed;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .social-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--green-lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      color: var(--white);
+      transition: transform .2s, background .2s;
+    }
+    .social-icon:hover { transform: scale(1.15); background: var(--green); }
+
+    /* WhatsApp flotante */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 16px rgba(37,211,102,.4);
+      transition: transform .2s;
+    }
+    .whatsapp-btn:hover { transform: scale(1.1); }
+
+    /* ── Navbar ─────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 90;
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      padding: .9rem 0;
+    }
+    nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .nav-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--green);
+      letter-spacing: -.5px;
+    }
+    .nav-logo sup { font-size: .6rem; font-style: normal; }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.75rem;
+    }
+    .nav-links a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta {
+      background: var(--green-lime);
+      color: var(--white);
+      padding: .55rem 1.25rem;
+      border-radius: var(--radius-pill);
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      transition: background .15s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--green); transform: translateY(-1px); }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(110deg, var(--green-dark) 0%, var(--green-mid) 55%, #1a6b1a 100%);
+      color: var(--white);
+      padding: 6rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: 'SOMEX';
+      position: absolute;
+      right: -2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14rem;
+      font-weight: 900;
+      font-style: italic;
+      color: rgba(255,255,255,.05);
+      pointer-events: none;
+      letter-spacing: -4px;
+      user-select: none;
+    }
+    .hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
       align-items: center;
     }
-    .what-visual {
-      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      border-radius: var(--radius);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: .75rem;
+    .hero-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--green-lime);
+      margin-bottom: 1rem;
     }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green-lime);
+    }
+    .hero p {
+      font-size: 1.05rem;
+      opacity: .88;
+      margin-bottom: 2rem;
+      max-width: 460px;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Hero stats */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .stat-card {
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--green-lime);
+      display: block;
+    }
+    .stat-card .lbl {
+      font-size: .85rem;
+      opacity: .8;
+      margin-top: .25rem;
+    }
+    .stat-card .ico { font-size: 1.75rem; margin-bottom: .5rem; display: block; }
+
+    /* ── Sección problema ───────────────────────────────────────── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .problem-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
     .problem-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      align-items: flex-start;
+      border-left: 4px solid transparent;
+      transition: border-color .2s;
+    }
+    .problem-item:hover { border-left-color: var(--green-lime); }
+    .problem-item.bad  { border-left-color: #F87171; }
+    .problem-item.good { border-left-color: var(--green-lime); }
+    .problem-item .ico { font-size: 1.75rem; flex-shrink: 0; margin-top: .1rem; }
+    .problem-item strong { display: block; font-family: 'Montserrat', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: .2rem; }
+    .problem-item span  { font-size: .875rem; color: var(--text-muted); }
+
+    .visual-box {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #1A6B1A 100%);
+      border-radius: var(--radius-md);
+      padding: 2.5rem 2rem;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .visual-box::after {
+      content: '✓';
+      position: absolute;
+      right: -1rem;
+      bottom: -2rem;
+      font-size: 12rem;
+      color: rgba(141,198,63,.1);
+      font-weight: 900;
+    }
+    .visual-box h3 {
+      font-size: 1.3rem;
+      font-style: italic;
+      margin-bottom: 1.25rem;
+      color: var(--green-lime);
+    }
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+    .check-list li {
       display: flex;
       align-items: flex-start;
       gap: .75rem;
-      background: #fff;
-      border-radius: 8px;
-      padding: 1rem;
       font-size: .9rem;
+      opacity: .9;
     }
-    .problem-item .ico { font-size: 1.4rem; flex-shrink: 0; }
-    .problem-item strong { display: block; margin-bottom: .25rem; }
-    .problem-item span { color: var(--gray); font-size: .85rem; }
+    .check-list li::before {
+      content: '✓';
+      width: 22px; height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      background: var(--green-lime);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 900;
+      margin-top: .1rem;
+    }
 
-    /* ─── Flujo de trabajo ──────────────────────────────────────── */
+    /* ── Flujo de trabajo ───────────────────────────────────────── */
     .flow-steps {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -153,179 +369,227 @@
     .flow-steps::before {
       content: '';
       position: absolute;
-      top: 2.5rem;
-      left: 15%;
-      right: 15%;
+      top: 2.6rem;
+      left: 12%;
+      right: 12%;
       height: 3px;
-      background: linear-gradient(90deg, #DBEAFE, #D1FAE5);
+      background: linear-gradient(90deg, var(--green), var(--green-lime));
       border-radius: 2px;
     }
     .step-card {
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 1.5rem 1rem;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 1.75rem 1.25rem 1.5rem;
       text-align: center;
-      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
       position: relative;
+      transition: transform .2s, box-shadow .2s;
+      border-bottom: 3px solid transparent;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.12);
+      border-bottom-color: var(--green-lime);
     }
     .step-num {
-      width: 3rem;
-      height: 3rem;
+      width: 3.2rem; height: 3.2rem;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       margin: 0 auto 1rem;
       position: relative;
       z-index: 1;
     }
-    .step-num-1 { background: #DBEAFE; }
-    .step-num-2 { background: #FEF3C7; }
-    .step-num-3 { background: #D1FAE5; }
-    .step-num-4 { background: #E5E7EB; }
-    .step-card h3 { font-size: 1rem; margin-bottom: .5rem; }
-    .step-card p  { font-size: .85rem; color: var(--gray); }
-    .step-card .status-badge { margin-top: .75rem; }
+    .s1 { background: #E8F5E9; }
+    .s2 { background: #FFF9C4; }
+    .s3 { background: #E8F5E9; }
+    .s4 { background: #ECEFF1; }
+    .step-card h3 { font-size: .95rem; font-weight: 800; margin-bottom: .5rem; font-family: 'Montserrat', sans-serif; }
+    .step-card p  { font-size: .83rem; color: var(--text-muted); }
+    .step-card .step-badge { margin-top: .9rem; }
 
-    /* ─── Estados de solicitud ──────────────────────────────────── */
-    .states-row {
+    /* Estados */
+    .states-flow {
       display: flex;
-      gap: 0;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 16px rgba(0,0,0,.08);
-      margin-top: 2rem;
+      gap: .5rem;
+      align-items: stretch;
+      margin-top: 2.5rem;
     }
-    .state-col {
+    .state-block {
       flex: 1;
-      padding: 2rem 1.5rem;
+      padding: 1.5rem 1rem;
       text-align: center;
+      border-radius: var(--radius-md);
     }
-    .state-col h3 { font-size: 1rem; margin-bottom: .5rem; }
-    .state-col p  { font-size: .85rem; opacity: .85; }
-    .state-abierta   { background: #EFF6FF; color: #1E40AF; }
-    .state-proceso   { background: #FEF3C7; color: #92400E; }
-    .state-resuelta  { background: #D1FAE5; color: #065F46; }
-    .state-cerrada   { background: #F3F4F6; color: #374151; }
+    .state-block h4 { font-family: 'Montserrat', sans-serif; font-size: .9rem; font-weight: 800; margin-bottom: .35rem; }
+    .state-block p  { font-size: .8rem; opacity: .85; }
+    .sb-1 { background: #DBEAFE; color: #1E40AF; }
+    .sb-2 { background: #FEF9C3; color: #854D0E; }
+    .sb-3 { background: #DCFCE7; color: #166534; }
+    .sb-4 { background: #F3F4F6; color: #374151; }
     .state-arrow {
-      display: flex;
-      align-items: center;
-      font-size: 1.5rem;
-      color: #9CA3AF;
-      padding: 0 .25rem;
+      display: flex; align-items: center;
+      color: var(--green-lime);
+      font-size: 1.4rem;
+      font-weight: 900;
     }
 
-    /* ─── Funcionalidades ───────────────────────────────────────── */
-    .features-grid {
+    /* ── Funcionalidades ────────────────────────────────────────── */
+    .feat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
-    .feature-card {
-      border: 1px solid #E5E7EB;
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      transition: border-color .2s, box-shadow .2s;
+    .feat-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 2rem 1.75rem;
+      border: 1px solid var(--gray-light);
+      transition: border-color .2s, box-shadow .2s, transform .2s;
     }
-    .feature-card:hover {
-      border-color: var(--blue);
-      box-shadow: 0 4px 20px rgba(37, 99, 235, .1);
+    .feat-card:hover {
+      border-color: var(--green-lime);
+      box-shadow: 0 6px 24px rgba(28,174,39,.1);
+      transform: translateY(-3px);
     }
-    .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .feature-card h3 { font-size: 1rem; margin-bottom: .5rem; }
-    .feature-card p  { font-size: .875rem; color: var(--gray); }
-    .feature-list { list-style: none; margin-top: .75rem; }
-    .feature-list li {
-      font-size: .85rem;
-      color: var(--gray);
-      padding: .2rem 0;
+    .feat-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-sm);
+      background: #E8F5E9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
     }
-    .feature-list li::before { content: '✓ '; color: var(--green); font-weight: 700; }
+    .feat-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: .5rem; }
+    .feat-card p  { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+    .feat-list { list-style: none; }
+    .feat-list li {
+      font-size: .83rem;
+      color: var(--text-muted);
+      padding: .25rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+    }
+    .feat-list li::before { content: '→'; color: var(--green-lime); font-weight: 900; flex-shrink: 0; }
 
-    /* ─── Alertas SLA ───────────────────────────────────────────── */
-    .sla-box {
-      background: #FFF7ED;
-      border: 2px solid #FED7AA;
-      border-radius: var(--radius);
+    /* ── Alertas SLA ────────────────────────────────────────────── */
+    .sla-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
       padding: 2.5rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 2rem;
       align-items: center;
+      border-top: 5px solid var(--green-lime);
     }
     .sla-icon { font-size: 4rem; }
-    .sla-box h3 { font-size: 1.25rem; margin-bottom: .5rem; color: #92400E; }
-    .sla-box p  { color: #78350F; font-size: .9rem; margin-bottom: .75rem; }
-    .sla-steps { list-style: none; }
-    .sla-steps li { font-size: .875rem; color: #78350F; padding: .3rem 0; }
-    .sla-steps li::before { content: '→ '; font-weight: 700; }
-
-    /* ─── Dashboard / Power BI ──────────────────────────────────── */
-    .dashboard-preview {
-      background: var(--dark);
-      border-radius: var(--radius);
-      padding: 2rem;
-      color: #fff;
+    .sla-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: .5rem; color: var(--green-dark); }
+    .sla-card p  { color: var(--text-muted); font-size: .9rem; margin-bottom: .75rem; }
+    .sla-steps { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .sla-steps li { font-size: .875rem; color: var(--text-muted); display: flex; gap: .6rem; align-items: flex-start; }
+    .sla-steps li .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green-lime);
+      margin-top: .45rem;
+      flex-shrink: 0;
     }
-    .dashboard-preview h3 {
-      font-size: .9rem;
-      color: #9CA3AF;
-      text-transform: uppercase;
-      letter-spacing: .06em;
+
+    /* ── Dashboard preview ──────────────────────────────────────── */
+    .dashboard-wrap {
+      background: #1A1A2E;
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: 0 8px 40px rgba(0,0,0,.25);
+    }
+    .db-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
     }
+    .db-topbar .db-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--green-lime);
+    }
+    .db-topbar .db-sub { font-size: .75rem; color: #9CA3AF; }
     .kpi-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
-    .kpi-card {
-      background: #1F2937;
-      border-radius: 8px;
+    .kpi {
+      background: #252540;
+      border-radius: 10px;
       padding: 1rem;
       text-align: center;
+      border-top: 3px solid var(--green-lime);
     }
-    .kpi-card .kpi-val { font-size: 1.75rem; font-weight: 700; }
-    .kpi-card .kpi-label { font-size: .75rem; color: #9CA3AF; margin-top: .25rem; }
+    .kpi .v { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; }
+    .kpi .l { font-size: .72rem; color: #9CA3AF; margin-top: .25rem; }
     .chart-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
-    .chart-box {
-      background: #1F2937;
-      border-radius: 8px;
-      padding: 1rem;
-      height: 120px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .chart {
+      background: #252540;
+      border-radius: 10px;
+      padding: 1.1rem;
     }
-    .chart-box .chart-title { font-size: .75rem; color: #9CA3AF; }
-    .bars { display: flex; align-items: flex-end; gap: .4rem; height: 70px; }
-    .bar { flex: 1; border-radius: 3px 3px 0 0; }
+    .chart .ct { font-size: .72rem; color: #9CA3AF; margin-bottom: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+    .bars { display: flex; align-items: flex-end; gap: .5rem; height: 75px; }
+    .bar { flex: 1; border-radius: 4px 4px 0 0; transition: height .3s; }
+    .bar-label { text-align: center; font-size: .62rem; color: #6B7280; margin-top: .3rem; }
+    .pie-ring {
+      width: 75px; height: 75px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green-lime) 0% 35%, #60A5FA 35% 60%, #F87171 60% 78%, #9CA3AF 78% 100%);
+      margin: 0 auto;
+    }
+    .legend { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .75rem; justify-content: center; }
+    .leg-item { display: flex; align-items: center; gap: .3rem; font-size: .65rem; color: #9CA3AF; }
+    .leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
-    /* ─── Quiénes pueden usar ───────────────────────────────────── */
+    /* ── Usuarios ───────────────────────────────────────────────── */
     .users-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
     .user-card {
-      text-align: center;
+      border-radius: var(--radius-md);
       padding: 2rem 1.5rem;
-      border-radius: var(--radius);
+      text-align: center;
     }
-    .user-card .avatar { font-size: 3rem; margin-bottom: 1rem; }
-    .user-card h3 { font-size: 1.05rem; margin-bottom: .5rem; }
-    .user-card p  { font-size: .875rem; color: var(--gray); }
-    .user-card-1 { background: #EFF6FF; }
-    .user-card-2 { background: #ECFDF5; }
-    .user-card-3 { background: #FFF7ED; }
+    .user-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1rem;
+    }
+    .user-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: .5rem; }
+    .user-card p  { font-size: .875rem; color: var(--text-muted); }
+    .uc-1 { background: #E8F5E9; }
+    .uc-1 .user-avatar { background: var(--green); color: #fff; }
+    .uc-2 { background: #EFF6FF; }
+    .uc-2 .user-avatar { background: #2563EB; color: #fff; }
+    .uc-3 { background: #FFFBEB; }
+    .uc-3 .user-avatar { background: #D97706; color: #fff; }
 
-    /* ─── Stack tecnológico ─────────────────────────────────────── */
+    /* ── Tech stack ─────────────────────────────────────────────── */
     .tech-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -333,269 +597,350 @@
     }
     .tech-item {
       text-align: center;
-      padding: 1.5rem 1rem;
-      border: 1px solid #E5E7EB;
-      border-radius: var(--radius);
+      padding: 1.75rem 1rem;
+      border-radius: var(--radius-md);
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      transition: border-color .2s, transform .2s;
     }
-    .tech-item .tech-icon { font-size: 2.5rem; margin-bottom: .5rem; }
-    .tech-item h4 { font-size: .875rem; font-weight: 700; }
-    .tech-item p  { font-size: .75rem; color: var(--gray); }
-
-    /* ─── Footer ────────────────────────────────────────────────── */
-    footer {
-      background: var(--dark);
-      color: #9CA3AF;
-      padding: 3rem 0;
+    .tech-item:hover { border-color: var(--green-lime); transform: translateY(-3px); }
+    .tech-item .ti { font-size: 2.5rem; margin-bottom: .5rem; }
+    .tech-item h4 { font-family: 'Montserrat', sans-serif; font-size: .85rem; font-weight: 800; }
+    .tech-item p  { font-size: .75rem; color: var(--text-muted); }
+    .conn-line {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-light);
+      padding: 1.75rem 2rem;
+      margin-top: 1.5rem;
       text-align: center;
     }
-    footer .logo { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: .5rem; }
-    footer p { font-size: .875rem; }
+    .conn-line h3 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: .5rem; }
+    .conn-line p  { font-size: .875rem; color: var(--text-muted); max-width: 680px; margin: 0 auto; }
+    .pipe {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .pipe-node {
+      background: var(--green-lime);
+      color: var(--white);
+      padding: .35rem .85rem;
+      border-radius: var(--radius-pill);
+      font-size: .78rem;
+    }
+    .pipe-arrow { color: var(--green-lime); font-size: 1.1rem; }
 
-    /* ─── Responsive ────────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      .hero-cards, .flow-steps, .features-grid, .users-grid, .tech-grid {
-        grid-template-columns: 1fr;
-      }
-      .what-grid { grid-template-columns: 1fr; }
-      .kpi-row   { grid-template-columns: repeat(2, 1fr); }
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,.75);
+      padding: 3rem 0 1.5rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--green-lime);
+      margin-bottom: .5rem;
+    }
+    .footer-desc { font-size: .875rem; opacity: .7; max-width: 280px; }
+    footer h4 { font-family: 'Montserrat', sans-serif; font-size: .85rem; font-weight: 800; color: var(--white); margin-bottom: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+    footer ul { list-style: none; }
+    footer ul li { font-size: .85rem; padding: .25rem 0; opacity: .7; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .8rem;
+      opacity: .55;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-grid, .problem-grid, .what-grid { grid-template-columns: 1fr; }
+      .flow-steps, .feat-grid, .users-grid, .tech-grid { grid-template-columns: 1fr 1fr; }
+      .kpi-row  { grid-template-columns: repeat(2, 1fr); }
+      .hero h1  { font-size: 2.2rem; }
+      .hero::before { display: none; }
+      .footer-top { grid-template-columns: 1fr; }
+      .nav-links  { display: none; }
+      .social-sidebar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .flow-steps, .feat-grid, .users-grid, .tech-grid { grid-template-columns: 1fr; }
       .chart-row { grid-template-columns: 1fr; }
-      .states-row { flex-direction: column; }
+      .states-flow { flex-direction: column; }
       .state-arrow { display: none; }
+      .sla-card { grid-template-columns: 1fr; text-align: center; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
       .flow-steps::before { display: none; }
-      nav ul { display: none; }
-      .sla-box { grid-template-columns: 1fr; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════ NAVBAR -->
+<!-- ══ SIDEBAR SOCIAL ══════════════════════════════════════════════ -->
+<div class="social-sidebar" aria-label="Redes sociales">
+  <a href="#" class="social-icon" title="LinkedIn">in</a>
+  <a href="#" class="social-icon" title="Facebook">f</a>
+  <a href="#" class="social-icon" title="Instagram">ig</a>
+  <a href="#" class="social-icon" title="YouTube">▶</a>
+</div>
+
+<!-- ══ WHATSAPP ════════════════════════════════════════════════════ -->
+<a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">💬</a>
+
+<!-- ══ NAVBAR ══════════════════════════════════════════════════════ -->
 <nav>
-  <div class="container">
-    <div class="logo">Gestor<span>TIC</span></div>
-    <ul>
-      <li><a href="#que-es">¿Qué es?</a></li>
-      <li><a href="#como-funciona">Cómo funciona</a></li>
-      <li><a href="#funcionalidades">Funciones</a></li>
+  <div class="inner">
+    <div class="nav-logo">SOMEX<sup>®</sup></div>
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#como-funciona">Cómo Funciona</a></li>
+      <li><a href="#funciones">Funciones</a></li>
       <li><a href="#reportes">Reportes</a></li>
       <li><a href="#tecnologia">Tecnología</a></li>
+      <li><a href="#contacto">Contacto</a></li>
     </ul>
+    <a href="#inicio" class="nav-cta">📋 Gestor TIC</a>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════════════ HERO -->
-<section class="hero">
+<!-- ══ HERO ════════════════════════════════════════════════════════ -->
+<section class="hero" id="inicio">
   <div class="container">
-    <p class="eyebrow">Prueba Técnica — Desarrollador TIC</p>
-    <h1>Gestor de Solicitudes <span>TIC</span></h1>
-    <p>Un sistema centralizado para que tu equipo pueda registrar, atender y medir el soporte técnico — sin hojas de cálculo dispersas.</p>
-    <div class="cta-row">
-      <a href="#como-funciona" class="btn btn-primary">Ver cómo funciona</a>
-      <a href="#funcionalidades" class="btn btn-outline">Explorar funciones</a>
-    </div>
-
-    <div class="hero-cards">
-      <div class="hero-card">
-        <div class="icon">📋</div>
-        <h3>Solicitudes centralizadas</h3>
-        <p>Todo en un solo lugar, accesible desde cualquier computadora.</p>
-      </div>
-      <div class="hero-card">
-        <div class="icon">⚡</div>
-        <h3>Alertas automáticas</h3>
-        <p>El sistema avisa cuando una solicitud urgente lleva más de 24 horas sin atención.</p>
-      </div>
-      <div class="hero-card">
-        <div class="icon">📊</div>
-        <h3>Reportes en tiempo real</h3>
-        <p>Dashboards visuales para que la gerencia tome decisiones con datos reales.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════ QUÉ ES -->
-<section class="section" id="que-es">
-  <div class="container">
-    <div class="what-grid">
+    <div class="hero-grid">
       <div>
-        <p class="tag">El problema que resuelve</p>
-        <h2 style="font-size:2rem; margin-bottom:1rem;">¿Por qué ya no más hojas de cálculo?</h2>
-        <p style="color:var(--gray); margin-bottom:1.5rem;">
-          Cuando el soporte técnico se gestiona en archivos de Excel dispersos, nadie sabe realmente cuántos problemas hay abiertos, qué tan rápido se están resolviendo, ni quién tiene demasiada carga de trabajo.
-        </p>
-        <p style="color:var(--gray);">
-          <strong style="color:var(--dark);">El Gestor de Solicitudes TIC</strong> reemplaza ese caos con una aplicación web ordenada donde los usuarios reportan sus problemas y el equipo técnico los atiende con trazabilidad completa.
-        </p>
+        <p class="hero-eyebrow">Sistema Interno · Área TIC</p>
+        <h1>Porque creemos que con <em>tecnología</em> trabajamos mejor <em>juntos.</em></h1>
+        <p>El Gestor de Solicitudes TIC centraliza todo el soporte técnico de SOMEX — sin hojas de cálculo, sin correos perdidos, con trazabilidad completa.</p>
+        <div class="hero-btns">
+          <a href="#como-funciona" class="btn btn-primary">📋 Ver cómo funciona</a>
+          <a href="#funciones" class="btn btn-outline">Explorar funciones →</a>
+        </div>
       </div>
-      <div class="what-visual">
-        <div class="problem-item">
-          <div class="ico">😤</div>
-          <div>
-            <strong>Sin el sistema</strong>
-            <span>El usuario manda un correo, queda en el buzón, nadie sabe si se resolvió.</span>
-          </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="ico">📋</span>
+          <span class="num">100%</span>
+          <span class="lbl">Solicitudes centralizadas</span>
         </div>
-        <div class="problem-item">
-          <div class="ico">📅</div>
-          <div>
-            <strong>Sin el sistema</strong>
-            <span>Cada analista tiene su lista personal en Excel. No hay visibilidad compartida.</span>
-          </div>
+        <div class="stat-card">
+          <span class="ico">⚡</span>
+          <span class="num">24h</span>
+          <span class="lbl">SLA prioridad Alta</span>
         </div>
-        <div class="problem-item">
-          <div class="ico">📈</div>
-          <div>
-            <strong>Sin el sistema</strong>
-            <span>El gerente no puede saber cuántos problemas urgentes llevan más de un día sin respuesta.</span>
-          </div>
+        <div class="stat-card">
+          <span class="ico">📊</span>
+          <span class="num">KPI</span>
+          <span class="lbl">Dashboard en tiempo real</span>
         </div>
-        <div class="problem-item" style="background:#ECFDF5;">
-          <div class="ico">✅</div>
-          <div>
-            <strong style="color:#065F46;">Con el Gestor TIC</strong>
-            <span style="color:#047857;">Todo queda registrado, asignado, rastreado y medido automáticamente.</span>
-          </div>
+        <div class="stat-card">
+          <span class="ico">🔔</span>
+          <span class="num">Auto</span>
+          <span class="lbl">Alertas automáticas</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ CÓMO FUNCIONA -->
+<!-- ══ EL PROBLEMA ═════════════════════════════════════════════════ -->
+<section class="section" id="problema">
+  <div class="container">
+    <div class="problem-grid">
+      <div>
+        <p class="tag">El problema que resolvemos</p>
+        <div class="divider"></div>
+        <h2 style="font-size:2rem; font-style:italic; margin-bottom:1rem;">¿Por qué ya no más hojas de cálculo?</h2>
+        <p style="color:var(--text-muted); margin-bottom:1.75rem;">Cuando el soporte técnico se gestiona en archivos dispersos nadie sabe qué está abierto, qué tan rápido se resuelve, ni quién tiene más carga.</p>
+        <ul class="problem-list">
+          <li class="problem-item bad">
+            <span class="ico">📧</span>
+            <div>
+              <strong>Sin el sistema</strong>
+              <span>El usuario manda un correo, queda en el buzón, nadie sabe si se resolvió.</span>
+            </div>
+          </li>
+          <li class="problem-item bad">
+            <span class="ico">📊</span>
+            <div>
+              <strong>Sin el sistema</strong>
+              <span>Cada analista tiene su lista en Excel. No hay visibilidad compartida.</span>
+            </div>
+          </li>
+          <li class="problem-item bad">
+            <span class="ico">🚨</span>
+            <div>
+              <strong>Sin el sistema</strong>
+              <span>Gerencia no sabe cuántos casos urgentes llevan más de 24h sin respuesta.</span>
+            </div>
+          </li>
+          <li class="problem-item good">
+            <span class="ico">✅</span>
+            <div>
+              <strong style="color:var(--green);">Con el Gestor TIC SOMEX</strong>
+              <span>Todo queda registrado, asignado, rastreado y medido automáticamente.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="visual-box">
+        <h3>Lo que gana SOMEX con este sistema</h3>
+        <ul class="check-list">
+          <li>Cero solicitudes perdidas — cada reporte queda registrado con fecha y hora</li>
+          <li>Asignación clara — cada caso va a un analista específico según su especialidad</li>
+          <li>Historial completo — cada cambio queda en la bitácora para auditoría</li>
+          <li>Alertas automáticas — los casos urgentes no pueden quedarse sin atención</li>
+          <li>Reportes para la gerencia — KPIs actualizados sin hacer nada extra</li>
+          <li>Cumplimiento del SLA — el sistema mide si se están respetando los tiempos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CÓMO FUNCIONA ═══════════════════════════════════════════════ -->
 <section class="section section--alt" id="como-funciona">
   <div class="container">
     <p class="tag">El flujo paso a paso</p>
-    <h2 style="font-size:2rem; margin-bottom:.75rem;">¿Cómo funciona?</h2>
-    <p style="color:var(--gray); margin-bottom:3rem; max-width:560px;">
-      Desde que un usuario reporta un problema hasta que queda solucionado, el sistema lleva el registro completo de cada paso.
-    </p>
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; margin-bottom:.75rem;">¿Cómo funciona?</h2>
+    <p style="color:var(--text-muted); margin-bottom:3rem; max-width:560px;">Desde que un usuario reporta un problema hasta que queda solucionado, el sistema lleva el registro completo de cada paso.</p>
 
     <div class="flow-steps">
       <div class="step-card">
-        <div class="step-num step-num-1">📝</div>
+        <div class="step-num s1">📝</div>
         <h3>1. Usuario crea la solicitud</h3>
-        <p>Describe el problema, elige la categoría (Incidente, Requerimiento o Mejora) y la prioridad.</p>
-        <div class="status-badge"><span class="badge badge-blue">Abierta</span></div>
+        <p>Describe el problema, elige la categoría y la prioridad. Solo toma 2 minutos.</p>
+        <div class="step-badge"><span class="badge badge-blue">Abierta</span></div>
       </div>
       <div class="step-card">
-        <div class="step-num step-num-2">🔧</div>
+        <div class="step-num s2">🔧</div>
         <h3>2. Analista la recibe</h3>
-        <p>Un analista del equipo TIC es asignado y comienza a trabajar en la solución.</p>
-        <div class="status-badge"><span class="badge badge-orange">En Proceso</span></div>
+        <p>El técnico TIC asignado ve la solicitud en su lista y empieza a trabajar.</p>
+        <div class="step-badge"><span class="badge badge-orange">En Proceso</span></div>
       </div>
       <div class="step-card">
-        <div class="step-num step-num-3">💡</div>
+        <div class="step-num s3">💡</div>
         <h3>3. Problema resuelto</h3>
-        <p>El analista aplica la solución y cambia el estado. El usuario puede verificar.</p>
-        <div class="status-badge"><span class="badge badge-green">Resuelta</span></div>
+        <p>El analista aplica la solución y registra qué se hizo. El usuario puede verificar.</p>
+        <div class="step-badge"><span class="badge badge-green">Resuelta</span></div>
       </div>
       <div class="step-card">
-        <div class="step-num step-num-4">🔒</div>
+        <div class="step-num s4">🔒</div>
         <h3>4. Solicitud cerrada</h3>
-        <p>Cuando el usuario confirma, la solicitud se cierra y queda en el historial permanente.</p>
-        <div class="status-badge"><span class="badge badge-gray">Cerrada</span></div>
+        <p>El caso se archiva en el historial permanente. No puede reabrirse ni modificarse.</p>
+        <div class="step-badge"><span class="badge badge-gray">Cerrada</span></div>
       </div>
     </div>
 
-    <div style="margin-top:3rem;">
-      <h3 style="font-size:1.1rem; margin-bottom:1rem; text-align:center;">Los 4 estados de una solicitud</h3>
-      <div style="display:flex; align-items:center; gap:.25rem;">
-        <div class="state-col state-abierta" style="border-radius:var(--radius) 0 0 var(--radius);">
-          <h3>🔵 Abierta</h3>
-          <p>Recién creada, esperando que un analista la tome.</p>
-        </div>
-        <div class="state-arrow">→</div>
-        <div class="state-col state-proceso">
-          <h3>🟡 En Proceso</h3>
-          <p>El analista ya la está atendiendo.</p>
-        </div>
-        <div class="state-arrow">→</div>
-        <div class="state-col state-resuelta">
-          <h3>🟢 Resuelta</h3>
-          <p>La solución fue aplicada, pendiente de confirmar.</p>
-        </div>
-        <div class="state-arrow">→</div>
-        <div class="state-col state-cerrada" style="border-radius:0 var(--radius) var(--radius) 0;">
-          <h3>⚫ Cerrada</h3>
-          <p>Confirmada y archivada. No se puede reabrir.</p>
-        </div>
+    <div class="states-flow">
+      <div class="state-block sb-1">
+        <h4>🔵 Abierta</h4>
+        <p>Recién reportada, esperando analista.</p>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-block sb-2">
+        <h4>🟡 En Proceso</h4>
+        <p>El analista ya la está atendiendo.</p>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-block sb-3">
+        <h4>🟢 Resuelta</h4>
+        <p>Solución aplicada, pendiente confirmar.</p>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-block sb-4">
+        <h4>⚫ Cerrada</h4>
+        <p>Confirmada y archivada definitivamente.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ FUNCIONALIDADES -->
-<section class="section" id="funcionalidades">
+<!-- ══ FUNCIONALIDADES ════════════════════════════════════════════ -->
+<section class="section" id="funciones">
   <div class="container">
     <p class="tag">¿Qué puede hacer el sistema?</p>
-    <h2 style="font-size:2rem; margin-bottom:.75rem;">Funcionalidades principales</h2>
-    <p style="color:var(--gray); margin-bottom:3rem; max-width:560px;">Todo lo que necesita un equipo de soporte técnico para trabajar de forma ordenada y medible.</p>
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; margin-bottom:.75rem;">Funcionalidades principales</h2>
+    <p style="color:var(--text-muted); margin-bottom:3rem; max-width:560px;">Todo lo que el equipo TIC de SOMEX necesita para trabajar de forma ordenada y medible.</p>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">📋</div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">📋</div>
         <h3>Registro de solicitudes</h3>
-        <p>El usuario llena un formulario sencillo y el sistema lo registra automáticamente.</p>
-        <ul class="feature-list">
+        <p>El usuario llena un formulario sencillo y el sistema lo registra automáticamente con fecha y hora.</p>
+        <ul class="feat-list">
           <li>Título y descripción del problema</li>
           <li>Tipo: Incidente / Requerimiento / Mejora</li>
           <li>Prioridad: Alta / Media / Baja</li>
           <li>Quién lo reporta y desde qué área</li>
         </ul>
       </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
+      <div class="feat-card">
+        <div class="feat-icon">🔍</div>
         <h3>Búsqueda y filtros</h3>
         <p>Encuentra cualquier solicitud en segundos con filtros inteligentes.</p>
-        <ul class="feature-list">
+        <ul class="feat-list">
           <li>Filtrar por estado actual</li>
           <li>Filtrar por prioridad</li>
           <li>Filtrar por rango de fechas</li>
-          <li>Buscar por usuario o analista</li>
+          <li>Filtrar por analista o usuario</li>
         </ul>
       </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">👤</div>
+      <div class="feat-card">
+        <div class="feat-icon">👤</div>
         <h3>Asignación a analistas</h3>
-        <p>Cada solicitud se puede asignar a un analista específico según su especialidad.</p>
-        <ul class="feature-list">
+        <p>Cada solicitud se asigna a un analista según su especialidad técnica.</p>
+        <ul class="feat-list">
           <li>Catálogo de analistas disponibles</li>
           <li>Reasignación cuando sea necesario</li>
-          <li>Visibilidad de la carga por persona</li>
+          <li>Visibilidad de carga por persona</li>
         </ul>
       </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📜</div>
+      <div class="feat-card">
+        <div class="feat-icon">📜</div>
         <h3>Historial completo</h3>
-        <p>Cada cambio queda registrado con fecha, hora y quién lo hizo.</p>
-        <ul class="feature-list">
+        <p>Cada cambio queda registrado con fecha, hora y quién lo realizó.</p>
+        <ul class="feat-list">
           <li>Quién cambió el estado y cuándo</li>
           <li>Cuánto tiempo tardó cada etapa</li>
           <li>Registro permanente e inalterable</li>
         </ul>
       </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">👥</div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
         <h3>Gestión de personas</h3>
-        <p>Administra el catálogo de usuarios y analistas del sistema.</p>
-        <ul class="feature-list">
+        <p>Administra el catálogo de usuarios solicitantes y analistas del sistema.</p>
+        <ul class="feat-list">
           <li>Agregar / editar / eliminar usuarios</li>
           <li>Agregar / editar / eliminar analistas</li>
           <li>Datos de contacto y área</li>
         </ul>
       </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
+      <div class="feat-card">
+        <div class="feat-icon">🛡️</div>
         <h3>Control y seguridad</h3>
-        <p>Reglas automáticas para que el flujo de trabajo se respete siempre.</p>
-        <ul class="feature-list">
+        <p>Reglas automáticas para que el flujo de trabajo siempre se respete.</p>
+        <ul class="feat-list">
           <li>Una solicitud cerrada no puede reabrirse</li>
           <li>Validación de campos obligatorios</li>
           <li>Confirmación antes de eliminar</li>
@@ -605,186 +950,234 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ ALERTAS SLA -->
+<!-- ══ ALERTAS SLA ════════════════════════════════════════════════ -->
 <section class="section section--alt">
   <div class="container">
     <p class="tag">Alertas automáticas de SLA</p>
-    <h2 style="font-size:2rem; margin-bottom:2rem;">¿Qué pasa cuando algo urgente lleva demasiado tiempo?</h2>
-    <div class="sla-box">
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; margin-bottom:2rem;">¿Qué pasa cuando algo urgente lleva demasiado tiempo?</h2>
+    <div class="sla-card">
       <div class="sla-icon">🚨</div>
       <div>
         <h3>Alerta de incumplimiento de SLA</h3>
-        <p>
-          El <strong>SLA (Service Level Agreement)</strong> es el acuerdo de que las solicitudes de prioridad <strong>Alta</strong> deben atenderse en menos de 24 horas. Si eso no ocurre, el sistema actúa automáticamente:
-        </p>
+        <p>El <strong>SLA (Service Level Agreement)</strong> de SOMEX establece que las solicitudes de prioridad <strong>Alta</strong> deben atenderse en menos de 24 horas. Si eso no ocurre, el sistema actúa solo:</p>
         <ul class="sla-steps">
-          <li>Cada mañana a las 7:00 a.m., el sistema busca solicitudes urgentes sin atender por más de 24 horas.</li>
-          <li>Las registra en una lista especial de alertas.</li>
-          <li>Power Automate envía una notificación automática al equipo (correo, Teams o SharePoint).</li>
-          <li>El equipo puede actuar de inmediato sin depender de que alguien revise manualmente.</li>
+          <li><span class="dot"></span>Cada mañana a las 7:00 a.m. el sistema detecta automáticamente los casos urgentes sin atender por más de 24 horas.</li>
+          <li><span class="dot"></span>Los registra en una lista especial de alertas con nombre del usuario, analista y horas transcurridas.</li>
+          <li><span class="dot"></span>Power Automate envía una notificación al equipo (correo, Teams o SharePoint) sin que nadie tenga que hacer nada.</li>
+          <li><span class="dot"></span>El equipo puede actuar de inmediato y el indicador de cumplimiento SLA queda registrado en el dashboard.</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ REPORTES -->
-<section class="section" id="reportes">
+<!-- ══ REPORTES / POWER BI ════════════════════════════════════════ -->
+<section class="section section--dark" id="reportes">
   <div class="container">
     <p class="tag">Inteligencia de datos con Power BI</p>
-    <h2 style="font-size:2rem; margin-bottom:.75rem;">Los gerentes ven el panorama completo</h2>
-    <p style="color:var(--gray); margin-bottom:2.5rem; max-width:560px;">
-      El tablero de Power BI conectado a los datos reales del sistema muestra en tiempo real cómo está funcionando el equipo de soporte.
-    </p>
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; margin-bottom:.75rem; color:#fff;">La gerencia de SOMEX ve el panorama completo</h2>
+    <p style="color:rgba(255,255,255,.65); margin-bottom:2.5rem; max-width:560px;">El dashboard conectado a los datos reales del sistema muestra cómo está funcionando el equipo TIC.</p>
 
-    <div class="dashboard-preview">
-      <h3>Dashboard — Gestor de Solicitudes TIC</h3>
+    <div class="dashboard-wrap">
+      <div class="db-topbar">
+        <div>
+          <div class="db-logo">SOMEX® · Gestor TIC</div>
+          <div class="db-sub">Dashboard de soporte — Actualizado hoy</div>
+        </div>
+        <div style="font-size:.75rem; color:#9CA3AF;">📅 Junio 2026</div>
+      </div>
       <div class="kpi-row">
-        <div class="kpi-card">
-          <div class="kpi-val" style="color:#60A5FA;">24</div>
-          <div class="kpi-label">Abiertas</div>
+        <div class="kpi">
+          <div class="v" style="color:#60A5FA;">24</div>
+          <div class="l">Abiertas</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-val" style="color:#FCD34D;">12</div>
-          <div class="kpi-label">En Proceso</div>
+        <div class="kpi">
+          <div class="v" style="color:#FCD34D;">12</div>
+          <div class="l">En Proceso</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-val" style="color:#34D399;">38</div>
-          <div class="kpi-label">Resueltas</div>
+        <div class="kpi">
+          <div class="v" style="color:#34D399;">38</div>
+          <div class="l">Resueltas</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-val" style="color:#F87171;">87%</div>
-          <div class="kpi-label">Cumplimiento SLA</div>
+        <div class="kpi">
+          <div class="v" style="color:#8DC63F;">87%</div>
+          <div class="l">Cumplimiento SLA</div>
         </div>
       </div>
       <div class="chart-row">
-        <div class="chart-box">
-          <div class="chart-title">Solicitudes por categoría</div>
+        <div class="chart">
+          <div class="ct">Solicitudes por categoría</div>
           <div class="bars">
-            <div class="bar" style="height:80%; background:#60A5FA;"></div>
-            <div class="bar" style="height:55%; background:#818CF8;"></div>
-            <div class="bar" style="height:40%; background:#34D399;"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+              <div class="bar" style="height:80%;background:#8DC63F;width:100%;"></div>
+              <div class="bar-label">Incidente</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+              <div class="bar" style="height:55%;background:#60A5FA;width:100%;"></div>
+              <div class="bar-label">Req.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+              <div class="bar" style="height:35%;background:#34D399;width:100%;"></div>
+              <div class="bar-label">Mejora</div>
+            </div>
           </div>
         </div>
-        <div class="chart-box">
-          <div class="chart-title">Tiempo promedio de atención (horas)</div>
-          <div class="bars">
-            <div class="bar" style="height:60%; background:#FCD34D;"></div>
-            <div class="bar" style="height:35%; background:#FCD34D;"></div>
-            <div class="bar" style="height:90%; background:#F87171;"></div>
+        <div class="chart">
+          <div class="ct">Solicitudes por prioridad</div>
+          <div class="pie-ring"></div>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#8DC63F;"></div>Alta 35%</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#60A5FA;"></div>Media 25%</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#F87171;"></div>Baja 18%</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#9CA3AF;"></div>Otros 22%</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="features-grid" style="margin-top:2rem;">
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>¿Cuántas solicitudes hay de cada tipo?</h3>
-        <p style="font-size:.875rem; color:var(--gray);">Gráfico que muestra cuántos Incidentes, Requerimientos y Mejoras se han reportado.</p>
+    <div class="feat-grid" style="margin-top:2rem;">
+      <div class="feat-card" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff;">
+        <div class="feat-icon" style="background:rgba(141,198,63,.15);">📊</div>
+        <h3 style="color:#fff;">¿Cuántos problemas hay de cada tipo?</h3>
+        <p style="color:rgba(255,255,255,.6);">Gráfico de barras con Incidentes, Requerimientos y Mejoras reportadas en el período.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">⏱️</div>
-        <h3>¿Cuánto tarda en resolverse un problema?</h3>
-        <p style="font-size:.875rem; color:var(--gray);">Tiempo promedio entre que se crea y se cierra una solicitud, por tipo y por analista.</p>
+      <div class="feat-card" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff;">
+        <div class="feat-icon" style="background:rgba(141,198,63,.15);">⏱️</div>
+        <h3 style="color:#fff;">¿Cuánto tarda en resolverse un caso?</h3>
+        <p style="color:rgba(255,255,255,.6);">Tiempo promedio entre apertura y cierre por analista y por tipo de categoría.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎯</div>
-        <h3>¿Estamos cumpliendo los acuerdos de servicio?</h3>
-        <p style="font-size:.875rem; color:var(--gray);">Porcentaje de solicitudes urgentes resueltas dentro de las 24 horas comprometidas.</p>
+      <div class="feat-card" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff;">
+        <div class="feat-icon" style="background:rgba(141,198,63,.15);">🎯</div>
+        <h3 style="color:#fff;">¿Estamos cumpliendo los acuerdos?</h3>
+        <p style="color:rgba(255,255,255,.6);">% de solicitudes urgentes resueltas dentro de las 24 horas comprometidas con el negocio.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ QUIÉNES USAN -->
-<section class="section section--alt">
+<!-- ══ QUIÉNES LO USAN ════════════════════════════════════════════ -->
+<section class="section">
   <div class="container">
-    <p class="tag">¿Para quién es este sistema?</p>
-    <h2 style="font-size:2rem; margin-bottom:2.5rem; text-align:center;">Tres tipos de personas lo usan</h2>
+    <p class="tag">Ellos ya confían en el Gestor TIC</p>
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; text-align:center; margin-bottom:2.5rem;">Tres perfiles, un solo sistema</h2>
     <div class="users-grid">
-      <div class="user-card user-card-1">
-        <div class="avatar">👩‍💼</div>
+      <div class="user-card uc-1">
+        <div class="user-avatar">👩‍💼</div>
         <h3>El Usuario Solicitante</h3>
-        <p>Cualquier empleado de la empresa que tenga un problema técnico. No necesita saber de tecnología — solo llena un formulario sencillo y el sistema hace el resto.</p>
+        <p>Cualquier colaborador de SOMEX que tenga un problema técnico. No necesita saber de tecnología — solo llena un formulario sencillo desde el navegador.</p>
       </div>
-      <div class="user-card user-card-2">
-        <div class="avatar">🧑‍💻</div>
+      <div class="user-card uc-2">
+        <div class="user-avatar">🧑‍💻</div>
         <h3>El Analista TIC</h3>
-        <p>El técnico de soporte que recibe las solicitudes asignadas. Ve su lista de tareas, actualiza el estado y registra cómo resolvió cada caso.</p>
+        <p>El técnico de soporte que recibe, atiende y cierra las solicitudes. Ve su lista de casos, actualiza el estado y registra cómo resolvió cada uno.</p>
       </div>
-      <div class="user-card user-card-3">
-        <div class="avatar">👨‍💼</div>
-        <h3>El Gerente / Director</h3>
-        <p>El jefe del área que necesita saber si el equipo está respondiendo bien. Ve el dashboard de Power BI con todos los indicadores sin entrar al sistema.</p>
+      <div class="user-card uc-3">
+        <div class="user-avatar">👨‍💼</div>
+        <h3>La Gerencia</h3>
+        <p>El director que necesita saber si el equipo responde bien. Ve el dashboard Power BI con todos los indicadores actualizados en tiempo real.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ TECNOLOGÍA -->
-<section class="section" id="tecnologia">
+<!-- ══ TECNOLOGÍA ═════════════════════════════════════════════════ -->
+<section class="section section--alt" id="tecnologia">
   <div class="container">
     <p class="tag">¿Con qué está construido?</p>
-    <h2 style="font-size:2rem; margin-bottom:.75rem;">Tecnología detrás del sistema</h2>
-    <p style="color:var(--gray); margin-bottom:2.5rem; max-width:560px;">No necesitas entender esto para usar el sistema — pero aquí está el detalle para quienes les interese saber cómo funciona por dentro.</p>
+    <div class="divider"></div>
+    <h2 style="font-size:2rem; font-style:italic; margin-bottom:.75rem;">Tecnología detrás del sistema</h2>
+    <p style="color:var(--text-muted); margin-bottom:2.5rem; max-width:560px;">No necesitas entender esto para usar el sistema — pero aquí está el detalle técnico.</p>
 
     <div class="tech-grid">
       <div class="tech-item">
-        <div class="tech-icon">🌐</div>
+        <div class="ti">🌐</div>
         <h4>ASP.NET Core MVC</h4>
-        <p>El sitio web de la aplicación, lo que ves y usas.</p>
+        <p>La aplicación web que ves y usas.</p>
       </div>
       <div class="tech-item">
-        <div class="tech-icon">🗄️</div>
+        <div class="ti">🗄️</div>
         <h4>SQL Server</h4>
-        <p>La base de datos donde se guardan todas las solicitudes de forma segura.</p>
+        <p>La base de datos que guarda todo de forma segura.</p>
       </div>
       <div class="tech-item">
-        <div class="tech-icon">⚡</div>
+        <div class="ti">⚡</div>
         <h4>Power Automate</h4>
-        <p>El robot que envía alertas automáticas cuando algo urgente lleva mucho tiempo sin atención.</p>
+        <p>El robot que envía alertas automáticas de SLA.</p>
       </div>
       <div class="tech-item">
-        <div class="tech-icon">📊</div>
+        <div class="ti">📊</div>
         <h4>Power BI</h4>
-        <p>Los gráficos y tableros que muestran cómo está funcionando el soporte.</p>
+        <p>Los gráficos y KPIs para la toma de decisiones.</p>
       </div>
       <div class="tech-item">
-        <div class="tech-icon">🎨</div>
+        <div class="ti">🎨</div>
         <h4>Bootstrap 5</h4>
-        <p>El diseño responsivo que hace que el sistema se vea bien en cualquier pantalla.</p>
+        <p>Diseño responsivo, se ve bien en cualquier pantalla.</p>
       </div>
     </div>
 
-    <div style="margin-top:3rem; background:var(--gray-lt); border-radius:var(--radius); padding:2rem; text-align:center;">
-      <h3 style="margin-bottom:.5rem;">¿Cómo se conectan todas las piezas?</h3>
-      <p style="color:var(--gray); font-size:.9rem; max-width:700px; margin:0 auto;">
-        Los usuarios interactúan con la <strong>aplicación web</strong> → los datos se guardan en <strong>SQL Server</strong> →
-        un <strong>Job automático</strong> detecta incumplimientos de SLA cada mañana →
-        <strong>Power Automate</strong> envía notificaciones →
-        <strong>Power BI</strong> muestra los datos actualizados para que gerencia tome decisiones.
-      </p>
+    <div class="conn-line">
+      <h3>¿Cómo se conectan todas las piezas?</h3>
+      <div class="pipe">
+        <span class="pipe-node">Usuario web</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">App ASP.NET</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">SQL Server</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">Job Diario</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">Power Automate</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">Power BI</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════ FOOTER -->
-<footer>
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer id="contacto">
   <div class="container">
-    <div class="logo">GestorTIC</div>
-    <p>Sistema de Gestión de Solicitudes de Soporte — TIC Soluciones S.A.</p>
-    <p style="margin-top:.5rem;">Prueba Técnica · Fausto Jiménez · Junio 2026</p>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">SOMEX<sup style="font-size:.5em;">®</sup></div>
+        <p class="footer-desc">Sistema Gestor de Solicitudes TIC — Solución interna para la gestión eficiente del soporte técnico y funcional de SOMEX.</p>
+      </div>
+      <div>
+        <h4>Sistema</h4>
+        <ul>
+          <li>Módulo de Solicitudes</li>
+          <li>Módulo de Usuarios</li>
+          <li>Módulo de Analistas</li>
+          <li>Dashboard Power BI</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto TIC</h4>
+        <ul>
+          <li>📧 tic@somex.com.co</li>
+          <li>📞 323 599 65 34</li>
+          <li>📍 Medellín, Colombia</li>
+          <li>🌐 somex.com.co</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SOMEX® — Todos los derechos reservados</span>
+      <span>Desarrollado por Fausto Jiménez · Prueba Técnica TIC</span>
+    </div>
   </div>
 </footer>
 
 <script>
-  // Smooth scroll para los links del navbar
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 </script>
